@@ -2,6 +2,7 @@ const LinkModel = require("../models/link.model");
 const { nanoid } = require("nanoid");
 const clickModel = require("../models/click.model");
 const UAparser = require("ua-parser-js");
+const redisClient = require("../config/redis");
 
 async function createLink(req, res){
     const {originalUrl} = req.body;
@@ -36,12 +37,22 @@ async function createLink(req, res){
 
 async function redirectToOriginalUrl(req, res){
     const {shortCode} = req.params;
+
+    const cacheUrl = await redisClient.redisClient.get(shortCode);
+    if(cacheUrl){
+        logClick(req,shortCode);
+        return res.redirect(cacheUrl)
+    }
+
     const link = await LinkModel.findOne({shortCode});
     if(!link){
         return res.status(404).json({
             message:"URL not found"
         })
     }
+
+    await redisClient.redisClient.set(shortCode, link.originalUrl, {EX:3600});
+
     logClick(req, shortCode);
     return res.redirect(link.originalUrl);
 }
