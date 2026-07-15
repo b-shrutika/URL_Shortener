@@ -5,6 +5,10 @@ const createLinkLimiter = require("../middlewares/rate.limiter");
 const router = express.Router();
 
 
+router.post("/login", authController.login);
+
+router.post("/register", authController.register);
+
 router.post("/create", createLinkLimiter, linkController.createLink);
 
 router.get("/:shortCode", linkController.redirectToOriginalUrl);
