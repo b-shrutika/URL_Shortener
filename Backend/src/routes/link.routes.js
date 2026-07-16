@@ -2,17 +2,13 @@ const express = require("express");
 const linkController = require("../controllers/link.controller");
 const analyticsController = require("../controllers/analytics.controller");
 const createLinkLimiter = require("../middlewares/rate.limiter");
+const verifyToken = require("../middlewares/auth.middleware")
 const router = express.Router();
 
-
-router.post("/login", authController.login);
-
-router.post("/register", authController.register);
-
-router.post("/create", createLinkLimiter, linkController.createLink);
+router.post("/", verifyToken, createLinkLimiter, linkController.createLink);
 
 router.get("/:shortCode", linkController.redirectToOriginalUrl);
 
-router.get("/analytics/:shortCode", analyticsController.getAnalytics);
+router.get("/analytics/:shortCode", verifyToken, analyticsController.getAnalytics);
 
 module.exports = router;

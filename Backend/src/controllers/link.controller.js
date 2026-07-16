@@ -23,14 +23,16 @@ async function createLink(req, res){
     const shortCode = nanoid(6); 
     const newLink = await LinkModel.create({
         originalUrl: originalUrl,
-        shortCode: shortCode
+        shortCode: shortCode,
+         userId:req.userId
     })
     const shortLink = `${process.env.BASE_URL}/${newLink.shortCode}`;
     res.status(201).json({
         message:"Short code created successfully",
         status:"success",
         shortCode: newLink.shortCode,
-        shortLink: shortLink
+        shortLink: shortLink,
+       
     })
 }
 

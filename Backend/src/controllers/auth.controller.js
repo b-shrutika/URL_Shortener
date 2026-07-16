@@ -1,16 +1,16 @@
-const accountModel = require("../models/account.model");
+const userModel = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken")
 
 async function register(req, res) {
     const { name, email, password } = req.body;
-    const existingUser = await accountModel.findOne({ email });
+    const existingUser = await userModel.findOne({ email });
 
     if (existingUser) {
         return res.status(409).json({ error: "Email already exists" });
     }
 
-    const user = await accountModel.create({ name, email, password });
+    const user = await userModel.create({ name, email, password });
     res.status(201).json({
         message: "User registered successfully",
         user: {
@@ -24,7 +24,7 @@ async function register(req, res) {
 
 async function login(req, res) {
     const { email, password } = req.body;
-    const user = await accountModel.findOne({ email });
+    const user = await userModel.findOne({ email });
 
     if (!user) {
         return res.status(401).json({ error: "Invalid email or password" });

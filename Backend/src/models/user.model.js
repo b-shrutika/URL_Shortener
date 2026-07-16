@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
-const accountSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name:{
         type:String,
         required:[true,"Name is required for creating an account"]
@@ -18,13 +18,12 @@ const accountSchema = new mongoose.Schema({
 
 },{timestamps:true})
 
-accountSchema.pre("save", async function(next){
+userSchema.pre("save", async function(){
     if(!this.isModified("password")){
-        return next();
+        return ;
     }
     this.password = await bcrypt.hash(this.password,10);
-    next();
 })
-const accountModel = mongoose.model("account", accountSchema);
+const userModel = mongoose.model("user", userSchema);
 
-module.exports = accountModel;
+module.exports = userModel;
