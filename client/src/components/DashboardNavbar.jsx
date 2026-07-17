@@ -1,10 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-
+import { useAuth } from '../context/AuthContext'
 const DashboardNavbar = () => {
+    const {user} = useAuth();
+    console.log(user)
   return (
     <nav className="flex items-center justify-between border-b bg-white px-8 py-5">
-
+            <h2>Welcome, {user?.name}</h2>
             <Link
                 to="/"
                 className="text-2xl font-bold text-blue-600"

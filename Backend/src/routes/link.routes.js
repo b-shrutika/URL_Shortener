@@ -6,6 +6,7 @@ const verifyToken = require("../middlewares/auth.middleware")
 const router = express.Router();
 
 router.post("/", verifyToken, createLinkLimiter, linkController.createLink);
+router.post("/my-links", verifyToken, linkController.getUserUrls);
 
 router.get("/:shortCode", linkController.redirectToOriginalUrl);
 

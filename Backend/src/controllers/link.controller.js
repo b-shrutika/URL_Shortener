@@ -72,7 +72,16 @@ function logClick(req,shortCode){
 }).catch(err => console.error("Error logging click:", err));
 
 }
+async function getUserUrls(req, res) {
+    const links = await LinkModel.find({ userId: req.userId }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+        message: "Links fetched successfully",
+        links
+    });
+}
 module.exports = {
     createLink,
-    redirectToOriginalUrl
+    redirectToOriginalUrl, 
+    getUserUrls
 }

@@ -46,5 +46,22 @@ async function login(req, res) {
     })
 }
 
+async function logout(req, res) {
+    res.status(200).json({
+        message: "Logged out successfully"
+    });
+}
+async function getCurrentUser(req, res) {
+    const user = await UserModel.findById(req.userId).select("-password");
 
-module.exports = {login, register}
+    if (!user) {
+        return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+        message: "User fetched successfully",
+        user
+    });
+}
+
+module.exports = {login, register, logout, getCurrentUser}
