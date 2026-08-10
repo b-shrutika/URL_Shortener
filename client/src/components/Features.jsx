@@ -16,14 +16,14 @@ const Features = () => {
         }
     ]
     return (
-        <section className='mx-auto grid max-w-6xl gap-8 px-8 py-20 md:grid-cols-3'>
+        <section id="features" className='mx-auto grid max-w-6xl gap-8 px-8 py-20 md:grid-cols-3'>
             {
                 features.map((feature)=>(
                     <div key={feature.title}
-                    className='rounded-xl border p-8 shadow-sm hover:shadow-lg transition'>
+                    className='rounded-2xl border border-white/10 bg-card p-8 shadow-sm hover:shadow-lg transition'>
                         <h2
-                        className='text-2xl font-semibold'>{feature.title}</h2>
-                        <p className='mt-4 text-gray-600'>
+                        className='text-2xl font-bold text-text-dark'>{feature.title}</h2>
+                        <p className='mt-4 text-text-gray'>
                             {feature.description}
                         </p>
                     </div>

@@ -1,0 +1,10 @@
+import * as icons from 'lucide-react';
+console.log('MousePointerClick:', !!icons.MousePointerClick);
+console.log('Link2:', !!icons.Link2);
+console.log('BarChart2:', !!icons.BarChart2);
+console.log('ArrowUpRight:', !!icons.ArrowUpRight);
+console.log('Globe:', !!icons.Globe);
+console.log('Edit2:', !!icons.Edit2);
+console.log('Sparkles:', !!icons.Sparkles);
+console.log('Crown:', !!icons.Crown);
+console.log('LayoutDashboard:', !!icons.LayoutDashboard);

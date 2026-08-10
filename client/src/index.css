@@ -1,5 +1,362 @@
 @import "tailwindcss";
 
+@theme {
+  --color-primary: #F47E4B;
+  --color-primary-light: #FF9B71;
+  --color-background: #160406;
+  --color-card: #450F15;
+  --color-border: #5C1A22;
+  --color-text-dark: #FFFFFF;
+  --color-text-gray: #D1B3B6;
+  --color-accent: #E06031;
+
+  --font-sans: 'Inter', sans-serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+  --font-script: 'Caveat', cursive;
+
+  --shadow-glow-primary: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-glow-accent: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
 html {
     scroll-behavior: smooth;
+    background-color: var(--color-background);
+    color: var(--color-text-dark);
+}
+
+/* From Uiverse.io by Galahhad */ 
+.ui-btn {
+  --btn-default-bg: var(--color-primary);
+  --btn-padding: 15px 20px;
+  --btn-hover-bg: var(--color-accent);
+  --btn-transition: .3s;
+  --btn-letter-spacing: .1rem;
+  --btn-animation-duration: 1.2s;
+  --btn-shadow-color: rgba(244, 126, 75, 0.4);
+  --btn-shadow: 0 2px 10px 0 var(--btn-shadow-color);
+  --hover-btn-color: var(--color-background);
+  --default-btn-color: #fff;
+  --font-size: 16px;
+  --font-weight: 600;
+  --font-family: Menlo,Roboto Mono,monospace;
+}
+
+.ui-btn {
+  box-sizing: border-box;
+  padding: var(--btn-padding);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--default-btn-color);
+  font: var(--font-weight) var(--font-size) var(--font-family);
+  background: var(--btn-default-bg);
+  border: none;
+  cursor: pointer;
+  transition: var(--btn-transition);
+  overflow: hidden;
+  box-shadow: var(--btn-shadow);
+}
+
+.ui-btn span {
+  letter-spacing: var(--btn-letter-spacing);
+  transition: var(--btn-transition);
+  box-sizing: border-box;
+  position: relative;
+  background: inherit;
+}
+
+.ui-btn span::before {
+  box-sizing: border-box;
+  position: absolute;
+  content: "";
+  background: inherit;
+}
+
+.ui-btn:hover, .ui-btn:focus {
+  background: var(--btn-hover-bg);
+}
+
+.ui-btn:hover span, .ui-btn:focus span {
+  color: var(--hover-btn-color);
+}
+
+.ui-btn:hover span::before, .ui-btn:focus span::before {
+  animation: chitchat linear both var(--btn-animation-duration);
+}
+
+@keyframes chitchat {
+  0% { content: "#"; }
+  5% { content: "."; }
+  10% { content: "^{"; }
+  15% { content: "-!"; }
+  20% { content: "#$_"; }
+  25% { content: "№:0"; }
+  30% { content: "#{+."; }
+  35% { content: "@}-?"; }
+  40% { content: "?{4@%"; }
+  45% { content: "=.,^!"; }
+  50% { content: "?2@%"; }
+  55% { content: "\;1}]"; }
+  60% { content: "?{%:%"; right: 0; }
+  65% { content: "|{f[4"; right: 0; }
+  70% { content: "{4%0%"; right: 0; }
+  75% { content: "'1_0<"; right: 0; }
+  80% { content: "{0%"; right: 0; }
+  85% { content: "]>'"; right: 0; }
+  90% { content: "4"; right: 0; }
+  95% { content: "2"; right: 0; }
+  100% { content: ""; right: 0; }
+}
+
+/* From Uiverse.io by reglobby */ 
+.user-profile {
+  width: 131px;
+  height: 51px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  background: linear-gradient(
+    to bottom right,
+    #F47E4B 0%,
+    rgba(244, 126, 75, 0) 30%
+  );
+  background-color: rgba(244, 126, 75, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-profile:hover,
+.user-profile:focus {
+  background-color: rgba(244, 126, 75, 0.7);
+  box-shadow: 0 0 10px rgba(244, 126, 75, 0.5);
+  outline: none;
+}
+
+.user-profile-inner {
+  width: 127px;
+  height: 47px;
+  border-radius: 13px;
+  background-color: var(--color-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.user-profile-inner svg {
+  width: 27px;
+  height: 27px;
+  fill: #fff;
+}
+
+/* From Uiverse.io by JkHuger */ 
+.rainbow-hover {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-primary);
+  background-color: var(--color-card);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 12px 24px;
+  position: relative;
+  line-height: 24px;
+  border-radius: 9px;
+  box-shadow: 0px 1px 2px var(--color-background),
+    0px 4px 16px var(--color-background);
+  transform-style: preserve-3d;
+  transform: scale(var(--s, 1)) perspective(600px)
+    rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  perspective: 600px;
+  transition: transform 0.1s;
+}
+
+.sp {
+  background: linear-gradient(
+      90deg,
+      #F47E4B,
+      #FFA27A,
+      #F47E4B
+    );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  display: block;
+}
+
+.rainbow-hover:active {
+  transition: 0.3s;
+  transform: scale(0.93);
+}
+
+/* From Uiverse.io by mi-series - adapted for URL Shortener theme */ 
+.uiverse-register-container {
+  position: relative;
+  max-width: 500px;
+  width: 100%;
+  background: var(--color-card);
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.uiverse-register-container header {
+  font-size: 2.5rem;
+  color: var(--color-primary);
+  font-weight: 700;
+  text-align: center;
+}
+
+.uiverse-register-container .uiverse-register-form {
+  margin-top: 15px;
+}
+
+.uiverse-register-form .input-box {
+  width: 100%;
+  margin-top: 15px;
+}
+
+.input-box label {
+  color: var(--color-text-dark);
+  font-weight: 500;
+}
+
+.uiverse-register-form :where(.input-box input) {
+  position: relative;
+  height: 45px;
+  width: 100%;
+  outline: none;
+  font-size: 1rem;
+  color: var(--color-text-dark);
+  margin-top: 8px;
+  border: 1px solid var(--color-primary-light);
+  border-radius: 8px;
+  padding: 0 15px;
+  background: var(--color-background);
+}
+
+.uiverse-register-form .input-box input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.uiverse-register-form button {
+  height: 50px;
+  width: 100%;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 25px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--color-primary);
+}
+
+.uiverse-register-form button:hover {
+  background: var(--color-accent);
+  box-shadow: var(--shadow-glow-accent);
+}
+
+/* From Uiverse.io by bociKond - themed for URL Shortener */ 
+.uiverse-login-form {
+  background-color: var(--color-card);
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.uiverse-login-form .header-text {
+  font-size: 2.5rem;
+  color: var(--color-primary);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.uiverse-login-form .input-span {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.uiverse-login-form .label {
+  color: var(--color-text-dark);
+  font-weight: 500;
+}
+
+.uiverse-login-form input[type="email"],
+.uiverse-login-form input[type="password"] {
+  height: 45px;
+  border: 1px solid var(--color-primary-light);
+  border-radius: 8px;
+  padding: 0 15px;
+  background: var(--color-background);
+  color: var(--color-text-dark);
+  outline: none;
+}
+
+.uiverse-login-form input[type="email"]:focus,
+.uiverse-login-form input[type="password"]:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.uiverse-login-form .span {
+  font-size: 0.9rem;
+  color: var(--color-text-gray);
+  display: block;
+}
+
+.uiverse-login-form .forgot-password {
+  text-align: right;
+}
+
+.uiverse-login-form .signup-text {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.uiverse-login-form .span a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.uiverse-login-form .span a:hover {
+  text-decoration: underline;
+}
+
+.uiverse-login-form .submit {
+  height: 50px;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 10px;
+}
+
+.uiverse-login-form .submit:hover {
+  background: var(--color-accent);
+  box-shadow: var(--shadow-glow-accent);
 }

@@ -22,9 +22,7 @@ export const loginUser = async (userData) => {
 
 export const logoutUser = async () => {
 
-    const response = await api.post(
-        "/api/auth/logout"
-    );
-
+    localStorage.removeItem("token");
+    navigate("/login");
     return response.data;
 };

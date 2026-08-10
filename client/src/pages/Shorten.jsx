@@ -1,58 +1,57 @@
-import React from 'react'
-import DashboardNavbar from '../components/DashboardNavbar'
-import CreateUrlCard from '../components/CreateUrlCard'
-import GeneratedUrlCard from '../components/GeneratedUrlCard'
-import EmptyState from '../components/EmptyState'
-import { useState } from 'react'
+import React, { useState } from 'react';
+import DashboardLayout from '../components/DashboardLayout';
+import CreateUrlCard from '../components/CreateUrlCard';
+import GeneratedUrlCard from '../components/GeneratedUrlCard';
+import { useAuth } from '../context/AuthContext';
 
 const Shorten = () => {
-  const [generatedUrl, setGeneratedUrl] = useState(null);
+    const { user } = useAuth();
+    const [generatedUrl, setGeneratedUrl] = useState(null);
 
     return (
-
-        <div className="min-h-screen bg-gray-100">
-
-            <DashboardNavbar />
-
-            <div className="mx-auto max-w-6xl px-6 py-10">
-
-                <h1 className="text-4xl font-bold">
-                    Welcome
-                </h1>
-
-                <p className="mt-2 text-gray-600">
-                    Manage all your shortened URLs.
-                </p>
-
-                <div className="mt-10">
-
-                    <CreateUrlCard
-                        onGenerate={setGeneratedUrl}
-                    />
-
-                    {generatedUrl && (
-                        <GeneratedUrlCard
-                            url={generatedUrl}
-                        />
-                    )}
-
+        <DashboardLayout>
+            <div className="flex flex-col items-center justify-center min-h-[calc(100vh-80px)] w-full py-12">
+                
+                {/* Minimalist Hero Headline matching reference image */}
+                <div className="text-center mb-12 max-w-3xl px-4">
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.2]" style={{ fontFamily: 'var(--font-heading)' }}>
+                        If you love sharing links — <br className="hidden md:block" />
+                        <span className="text-primary italic font-normal" style={{ fontFamily: 'var(--font-serif)' }}>start here.</span>
+                    </h1>
                 </div>
 
-                <div className="mt-12">
+                {/* Main Shortener Card */}
+                <div className="w-full max-w-2xl px-4 relative z-10">
+                    <div className="bg-[#CBA36A] border border-[#450F15]/20 rounded-3xl p-8 shadow-2xl relative overflow-hidden transition-all duration-300">
+                        
+                        {/* Decorative Top Left Number */}
+                        <div className="absolute top-8 left-8 flex items-center gap-2">
+                            <span className="text-[#450F15]/50 text-xs font-mono tracking-widest">0 1</span>
+                        </div>
 
-                    <h2 className="mb-6 text-3xl font-semibold">
-                        Your URLs
-                    </h2>
+                        <div className="mt-8">
+                            <CreateUrlCard onGenerate={setGeneratedUrl} />
+                            
+                            {generatedUrl && (
+                                <div className="mt-8">
+                                    <GeneratedUrlCard url={generatedUrl} />
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
 
-                    <EmptyState />
-
+                {/* Very faint scattered background stars effect to match image */}
+                <div className="fixed inset-0 pointer-events-none opacity-20">
+                    <div className="absolute top-[20%] left-[15%] w-1 h-1 bg-white rounded-full shadow-[0_0_8px_fff]"></div>
+                    <div className="absolute top-[60%] left-[10%] w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_10px_fff]"></div>
+                    <div className="absolute top-[30%] right-[20%] w-1 h-1 bg-white rounded-full shadow-[0_0_8px_fff]"></div>
+                    <div className="absolute top-[75%] right-[15%] w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_10px_fff]"></div>
                 </div>
 
             </div>
-
-        </div>
-
+        </DashboardLayout>
     );
 }
 
-export default Shorten
+export default Shorten;

@@ -1,37 +1,40 @@
 import React from 'react'
 
-const GeneratedUrlCard = (url ) => {
+const GeneratedUrlCard = ({url}) => {
   return (
-    <div className="mt-8 rounded-xl border border-green-300 bg-green-50 p-6">
+    <div className="mt-8 rounded-xl border border-[#450F15]/20 bg-[#450F15]/5 p-6 shadow-inner">
+        <h3 className="text-lg font-bold text-[#450F15] tracking-tight">
+            Short URL Generated
+        </h3>
 
-            <h3 className="text-xl font-semibold text-green-700">
-                URL Generated Successfully
-            </h3>
+        <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <a
+                href={url}
+                target="_blank"
+                rel="noreferrer"
+                className="font-semibold text-[#450F15] underline decoration-[#450F15]/40 hover:decoration-[#450F15] underline-offset-4 truncate"
+            >
+                {url}
+            </a>
 
-            <div className="mt-4 flex items-center justify-between">
-
-                <a
-                    href={url }
-                    className="font-medium text-blue-600"
+            <div className="flex gap-2 shrink-0">
+                <button 
+                    onClick={() => navigator.clipboard.writeText(url)}
+                    className="rounded-lg border border-[#450F15] bg-transparent px-4 py-2 text-[#450F15] text-sm font-bold hover:bg-[#450F15]/10 transition-colors"
                 >
-                   { url }
+                    Copy
+                </button>
+                <a 
+                    href={url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-lg border border-[#450F15] bg-[#450F15] px-4 py-2 text-[#CBA36A] text-sm font-bold hover:bg-[#350B10] transition-colors inline-block text-center"
+                >
+                    Visit
                 </a>
-
-                <div className="flex gap-3">
-
-                    <button className="rounded bg-blue-600 px-4 py-2 text-white">
-                        Copy
-                    </button>
-
-                    <button className="rounded bg-green-600 px-4 py-2 text-white">
-                        Open
-                    </button>
-
-                </div>
-
             </div>
-
         </div>
+    </div>
   )
 }
 
