@@ -4,22 +4,29 @@ import { Link } from 'react-router-dom'
 const Navbar = () => {
     return (
         <nav className='flex items-center justify-between px-6 py-4 shadow-sm'>
-            <h1 className='text-2xl font-bold text-primary'>URL Shortener</h1>
+            <h1 className='text-2xl font-bold text-primary tracking-tight'>Shawrtsy</h1>
 
-            <div className='hidden space-x-6 md:flex'>
-                <a href="#features"
-                    className="hover:text-primary transition-colors cursor-pointer text-text-gray"
-                >
-                    Features
-                </a>
+            <div className='flex items-center space-x-6'>
+                <div className='hidden md:flex space-x-6 mr-4'>
+                    <a href="#features"
+                        className="hover:text-primary transition-colors cursor-pointer text-text-gray font-medium"
+                    >
+                        Features
+                    </a>
 
-                <a href="#about"
-                    className="hover:text-primary transition-colors cursor-pointer text-text-gray"
-                >
-                    About
-                </a>
-            </div>
-            <div className='space-x-4 flex items-center'>
+                    <a href="#about"
+                        className="hover:text-primary transition-colors cursor-pointer text-text-gray font-medium"
+                    >
+                        About
+                    </a>
+
+                    <a href="#contact"
+                        className="hover:text-primary transition-colors cursor-pointer text-text-gray font-medium"
+                    >
+                        Contact
+                    </a>
+                </div>
+                <div className='space-x-4 flex items-center'>
                 <Link to="/login" className="user-profile">
                     <div className="user-profile-inner">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -31,6 +38,7 @@ const Navbar = () => {
                 <Link to="/register" className="rainbow-hover">
                     <span className="sp">Register</span>
                 </Link>
+            </div>
             </div>
         </nav>
     )

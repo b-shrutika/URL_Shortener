@@ -4,7 +4,8 @@ import PixelCard from './PixelCard'
 const Contact = () => {
   return (
         <section
-            className="px-6 py-20"
+            id="contact"
+            className="px-6 pt-8 pb-20"
         >
 
             <div className="mx-auto max-w-5xl">

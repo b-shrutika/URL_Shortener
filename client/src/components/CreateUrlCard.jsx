@@ -18,10 +18,10 @@ const CreateUrlCard = ({ onGenerate }) => {
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col">
-            <h2 className="text-3xl font-bold text-[#450F15] mb-4 tracking-tight" style={{ fontFamily: 'var(--font-heading)' }}>
+            <h2 className="text-3xl font-bold text-text-dark mb-4 tracking-tight" style={{ fontFamily: 'var(--font-heading)' }}>
                 Create Short URL
             </h2>
-            <p className="text-[#450F15]/80 text-base leading-relaxed mb-10 pr-4 font-medium">
+            <p className="text-text-gray text-base leading-relaxed mb-10 pr-4 font-medium">
                 Paste your long URL below to instantly generate a clean, trackable short link. No complex analytics, no bloat—just paste and share.
             </p>
 
@@ -31,13 +31,13 @@ const CreateUrlCard = ({ onGenerate }) => {
                     placeholder="https://example.com/very/long/path/to/share"
                     value={originalUrl}
                     onChange={(e) => setOriginalUrl(e.target.value)}
-                    className="w-full bg-transparent border-b-2 border-[#450F15]/30 px-0 py-4 text-[#450F15] placeholder-[#450F15]/50 outline-none focus:border-[#450F15] transition-colors text-lg font-medium"
+                    className="w-full bg-transparent border-b-2 border-border px-0 py-4 text-text-dark placeholder-text-gray/50 outline-none focus:border-primary transition-colors text-lg font-medium"
                 />
 
                 <div className="pt-8">
                     <button 
                         type="submit"
-                        className="w-full rounded-xl bg-[#450F15] py-4 text-[#CBA36A] font-bold hover:bg-[#350B10] transition-all duration-300 text-base tracking-wide shadow-md"
+                        className="w-full rounded-xl bg-primary py-4 text-background font-bold hover:bg-accent transition-all duration-300 text-base tracking-wide shadow-md"
                     >
                         Generate Short URL
                     </button>

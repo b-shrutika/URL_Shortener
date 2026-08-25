@@ -22,11 +22,11 @@ const Shorten = () => {
 
                 {/* Main Shortener Card */}
                 <div className="w-full max-w-2xl px-4 relative z-10">
-                    <div className="bg-[#CBA36A] border border-[#450F15]/20 rounded-3xl p-8 shadow-2xl relative overflow-hidden transition-all duration-300">
+                    <div className="bg-card border border-border rounded-3xl p-8 shadow-2xl relative overflow-hidden transition-all duration-300">
                         
                         {/* Decorative Top Left Number */}
                         <div className="absolute top-8 left-8 flex items-center gap-2">
-                            <span className="text-[#450F15]/50 text-xs font-mono tracking-widest">0 1</span>
+                            <span className="text-text-gray text-xs font-mono tracking-widest">0 1</span>
                         </div>
 
                         <div className="mt-8">

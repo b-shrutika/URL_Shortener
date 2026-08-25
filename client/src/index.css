@@ -1,6 +1,20 @@
 @import "tailwindcss";
 
 @theme {
+  /* NEW PALETTE */
+  --color-primary: #F97316;
+  --color-secondary: #E8B34D;
+  --color-accent: #5FAE9A;
+  
+  --color-background: #2A1015;
+  --color-background-dark: #1F0C10;
+  --color-card: #3A1A20;
+  --color-border: #4A2530;
+  
+  --color-text-dark: #F2E8E6;
+  --color-text-gray: #B08A8A;
+  
+  /* OLD PALETTE (BACKUP)
   --color-primary: #F47E4B;
   --color-primary-light: #FF9B71;
   --color-background: #160406;
@@ -9,6 +23,7 @@
   --color-text-dark: #FFFFFF;
   --color-text-gray: #D1B3B6;
   --color-accent: #E06031;
+  */
 
   --font-sans: 'Inter', sans-serif;
   --font-heading: 'Space Grotesk', sans-serif;
@@ -360,3 +375,142 @@ html {
   background: var(--color-accent);
   box-shadow: var(--shadow-glow-accent);
 }
+
+/* New Glass Feature Cards */
+.glass-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap; /* Allows wrapping on very small screens, though hover effect is best horizontally */
+  padding: 50px 0;
+}
+
+.glass-container .glass {
+  position: relative;
+  width: 220px;
+  height: 250px;
+  background: linear-gradient(rgba(255, 255, 255, 0.1), transparent);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 25px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: 0.5s;
+  border-radius: 15px;
+  margin: 0 -45px;
+  backdrop-filter: blur(10px);
+  transform: rotate(calc(var(--r) * 1deg));
+  cursor: pointer;
+}
+
+.glass-container:hover .glass {
+  transform: rotate(0deg);
+  margin: 0 20px;
+}
+
+.glass-container .glass::before {
+  content: attr(data-text);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 1px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+.glass-container .glass svg {
+  width: 60px;
+  height: 60px;
+  color: var(--color-primary);
+  margin-bottom: 30px;
+  transition: 0.5s;
+}
+
+.glass-container .glass .glass-content {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 65px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 0.5s;
+  color: white;
+  padding: 15px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  pointer-events: none;
+}
+
+.glass-container .glass:hover .glass-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.glass-container .glass:hover svg {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* About Cards */
+.about-card {
+  position: relative;
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 32px;
+  gap: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.about-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  left: -5px;
+  top: -5px;
+  margin: auto;
+  width: calc(100% + 10px);
+  height: calc(100% + 10px);
+  border-radius: 14px;
+  background: linear-gradient(-45deg, var(--color-primary) 0%, var(--color-secondary) 100% );
+  z-index: -10;
+  pointer-events: none;
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.about-card::after {
+  content: "";
+  z-index: -1;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(-45deg, var(--color-primary) 0%, var(--color-secondary) 100% );
+  transform: translate3d(0, 0, 0) scale(0.95);
+  filter: blur(20px);
+  transition: filter 0.6s;
+}
+
+.about-card:hover::after {
+  filter: blur(30px);
+}
+
+.about-card:hover::before {
+  transform: rotate(180deg);
+}

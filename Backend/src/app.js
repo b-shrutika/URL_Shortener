@@ -11,7 +11,11 @@ app.use(
         credentials: true,
     })
 );
+const linkController = require("./controllers/link.controller");
+
 app.use("/api/links", linkRouter);
-app.use("/api/auth", authRouter)
+app.use("/api/auth", authRouter);
+
+app.get("/:shortCode", linkController.redirectToOriginalUrl);
 
 module.exports = app;

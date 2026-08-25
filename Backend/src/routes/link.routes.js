@@ -8,8 +8,6 @@ const router = express.Router();
 router.post("/", verifyToken, createLinkLimiter, linkController.createLink);
 router.post("/my-links", verifyToken, linkController.getUserUrls);
 
-router.get("/:shortCode", linkController.redirectToOriginalUrl);
-
 router.get("/analytics/:shortCode", verifyToken, analyticsController.getAnalytics);
 
 module.exports = router;
