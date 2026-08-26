@@ -1,16 +1,16 @@
 import React from 'react';
-import Sidebar from './Sidebar';
-import TopNavbar from './TopNavbar';
+import { Link } from 'react-router-dom';
 
 const DashboardLayout = ({ children }) => {
     return (
-        <div className="flex min-h-screen bg-transparent">
-            <Sidebar />
-            <main className="flex-1 flex flex-col h-screen overflow-hidden">
-                <TopNavbar />
-                <div className="flex-1 overflow-y-auto px-6 pb-6">
-                    {children}
-                </div>
+        <div className="min-h-screen bg-transparent flex flex-col">
+            <header className="px-8 py-6 flex items-center justify-between z-10">
+                <Link to="/" className="text-2xl font-bold text-[#FF60AF] tracking-tight drop-shadow-[0_0_10px_rgba(255,96,175,0.4)]">
+                    Shawrtsy
+                </Link>
+            </header>
+            <main className="flex-1 w-full">
+                {children}
             </main>
         </div>
     );

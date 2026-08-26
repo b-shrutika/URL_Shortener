@@ -5,7 +5,7 @@
   width: 100vw;
   height: 100vh;
   z-index: -10;
-  background: linear-gradient(to bottom, #2E1315, var(--color-background) 70%, #1a0a0c);
+  background: linear-gradient(to bottom, #8C6E63, var(--color-background) 70%, #2A1816);
   overflow: hidden;
   pointer-events: none;
 }

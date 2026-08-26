@@ -1,11 +1,11 @@
 import React from 'react'
 import AppRoutes from './routes/AppRoutes'
-import StarsBackground from './components/StarsBackground'
+import VantaBirdsBackground from './components/VantaBirdsBackground'
 
 const App = () => {
   return (
     <>
-      <StarsBackground />
+      <VantaBirdsBackground />
       <AppRoutes/>
     </>
   )

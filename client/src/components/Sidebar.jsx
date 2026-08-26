@@ -44,9 +44,9 @@ const Sidebar = () => {
             <div className="flex-1 overflow-y-auto px-2 py-8 overflow-hidden">
                 <LineSidebar
                   items={menuItems.map(item => item.label)}
-                  accentColor="#F97316"
-                  textColor="#F2E8E6"
-                  markerColor="#4A2530"
+                  accentColor="#FF6B8B"
+                  textColor="#F8FAFC"
+                  markerColor="#233554"
                   showIndex={false}
                   showMarker
                   proximityRadius={100}

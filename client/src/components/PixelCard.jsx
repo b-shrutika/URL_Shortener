@@ -121,10 +121,10 @@ const VARIANTS = {
     noFocus: true
   },
   orange: {
-    activeColor: '#F47E4B',
+    activeColor: '#FF6B8B',
     gap: 5,
     speed: 35,
-    colors: '#F47E4B,#FFA27A,#643229,#482324',
+    colors: '#07192F,#112240,#FF6B8B,#FF8E53,#FFA07A',
     noFocus: false
   }
 };

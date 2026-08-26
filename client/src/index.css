@@ -1,37 +1,27 @@
 @import "tailwindcss";
 
 @theme {
-  /* NEW PALETTE */
-  --color-primary: #F97316;
-  --color-secondary: #E8B34D;
-  --color-accent: #5FAE9A;
+  /* VANTA MIDNIGHT NAVY & NEON CORAL PALETTE SYSTEM */
+  --color-primary: #F62477;
+  --color-primary-light: #FFA07A;
+  --color-secondary: #FF8E53;
+  --color-accent: #FFA07A;
   
-  --color-background: #2A1015;
-  --color-background-dark: #1F0C10;
-  --color-card: #3A1A20;
-  --color-border: #4A2530;
+  --color-background: #0a0e27;
+  --color-background-dark: #070a1e;
+  --color-card: #112240;
+  --color-border: #233554;
   
-  --color-text-dark: #F2E8E6;
-  --color-text-gray: #B08A8A;
-  
-  /* OLD PALETTE (BACKUP)
-  --color-primary: #F47E4B;
-  --color-primary-light: #FF9B71;
-  --color-background: #160406;
-  --color-card: #450F15;
-  --color-border: #5C1A22;
-  --color-text-dark: #FFFFFF;
-  --color-text-gray: #D1B3B6;
-  --color-accent: #E06031;
-  */
+  --color-text-dark: #F8FAFC;
+  --color-text-gray: #8892B0;
 
   --font-sans: 'Inter', sans-serif;
   --font-heading: 'Space Grotesk', sans-serif;
   --font-serif: 'Playfair Display', serif;
   --font-script: 'Caveat', cursive;
 
-  --shadow-glow-primary: 0 4px 12px rgba(0, 0, 0, 0.4);
-  --shadow-glow-accent: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-glow-primary: 0 4px 15px rgba(255, 107, 139, 0.4);
+  --shadow-glow-accent: 0 4px 15px rgba(255, 160, 122, 0.4);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -53,10 +43,10 @@ html {
   --btn-transition: .3s;
   --btn-letter-spacing: .1rem;
   --btn-animation-duration: 1.2s;
-  --btn-shadow-color: rgba(244, 126, 75, 0.4);
+  --btn-shadow-color: rgba(255, 107, 139, 0.4);
   --btn-shadow: 0 2px 10px 0 var(--btn-shadow-color);
-  --hover-btn-color: var(--color-background);
-  --default-btn-color: #fff;
+  --hover-btn-color: #07192F;
+  --default-btn-color: #07192F;
   --font-size: 16px;
   --font-weight: 600;
   --font-family: Menlo,Roboto Mono,monospace;
@@ -138,10 +128,10 @@ html {
   transition: 0.3s ease;
   background: linear-gradient(
     to bottom right,
-    #F47E4B 0%,
-    rgba(244, 126, 75, 0) 30%
+    #FF6B8B 0%,
+    rgba(255, 107, 139, 0) 30%
   );
-  background-color: rgba(244, 126, 75, 0.2);
+  background-color: rgba(255, 107, 139, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -149,8 +139,8 @@ html {
 
 .user-profile:hover,
 .user-profile:focus {
-  background-color: rgba(244, 126, 75, 0.7);
-  box-shadow: 0 0 10px rgba(244, 126, 75, 0.5);
+  background-color: rgba(255, 107, 139, 0.5);
+  box-shadow: 0 0 12px rgba(255, 107, 139, 0.5);
   outline: none;
 }
 
@@ -163,14 +153,14 @@ html {
   align-items: center;
   justify-content: center;
   gap: 15px;
-  color: #fff;
+  color: var(--color-text-dark);
   font-weight: 600;
 }
 
 .user-profile-inner svg {
   width: 27px;
   height: 27px;
-  fill: #fff;
+  fill: var(--color-text-dark);
 }
 
 /* From Uiverse.io by JkHuger */ 
@@ -198,9 +188,9 @@ html {
 .sp {
   background: linear-gradient(
       90deg,
-      #F47E4B,
-      #FFA27A,
-      #F47E4B
+      #FF6B8B,
+      #FFA07A,
+      #FF6B8B
     );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -214,15 +204,31 @@ html {
   transform: scale(0.93);
 }
 
-/* From Uiverse.io by mi-series - adapted for URL Shortener theme */ 
+/* From Uiverse.io by mi-series - adapted for URL Shortener theme with 3D Shadow */ 
 .uiverse-register-container {
   position: relative;
   max-width: 500px;
   width: 100%;
-  background: var(--color-card);
+  background: rgba(17, 34, 64, 0.85);
+  border: 1px solid rgba(255, 96, 175, 0.35);
+  backdrop-filter: blur(16px);
   padding: 35px;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  box-shadow: 
+    0 30px 60px -12px rgba(0, 0, 0, 0.75),
+    0 0 35px rgba(255, 96, 175, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.uiverse-register-container:hover {
+  transform: translateY(-4px) perspective(1000px) rotateX(1deg) rotateY(-1deg);
+  box-shadow: 
+    0 40px 80px -15px rgba(0, 0, 0, 0.85),
+    0 0 50px rgba(255, 96, 175, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 96, 175, 0.5);
 }
 
 .uiverse-register-container header {
@@ -279,23 +285,68 @@ html {
   background: var(--color-primary);
 }
 
-.uiverse-register-form button:hover {
-  background: var(--color-accent);
-  box-shadow: var(--shadow-glow-accent);
+/* Light Greyish Section Theme */
+.light-card {
+  --color-text-dark: #0f172a;
+  --color-text-gray: #475569;
+  --color-border: #cbd5e1;
+  --color-card: #ffffff;
+  --color-background: #f8fafc;
 }
 
-/* From Uiverse.io by bociKond - themed for URL Shortener */ 
+/* Dashboard 3D Floating Glass Cards */
+.dashboard-3d-card {
+  position: relative;
+  background: rgba(17, 34, 64, 0.85);
+  border: 1px solid rgba(255, 96, 175, 0.35);
+  backdrop-filter: blur(16px);
+  border-radius: 24px;
+  box-shadow: 
+    0 30px 60px -12px rgba(0, 0, 0, 0.75),
+    0 0 35px rgba(255, 96, 175, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.dashboard-3d-card:hover {
+  transform: translateY(-4px) perspective(1000px) rotateX(1deg) rotateY(-1deg);
+  box-shadow: 
+    0 40px 80px -15px rgba(0, 0, 0, 0.85),
+    0 0 50px rgba(255, 96, 175, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 96, 175, 0.5);
+}
+
+/* From Uiverse.io by bociKond - themed for URL Shortener with 3D Shadow */ 
 .uiverse-login-form {
-  background-color: var(--color-card);
+  position: relative;
+  background: rgba(17, 34, 64, 0.85);
+  border: 1px solid rgba(255, 96, 175, 0.35);
+  backdrop-filter: blur(16px);
   padding: 35px;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  box-shadow: 
+    0 30px 60px -12px rgba(0, 0, 0, 0.75),
+    0 0 35px rgba(255, 96, 175, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
   display: flex;
   flex-direction: column;
   gap: 15px;
   width: 100%;
   max-width: 400px;
   margin: 0 auto;
+}
+
+.uiverse-login-form:hover {
+  transform: translateY(-4px) perspective(1000px) rotateX(1deg) rotateY(-1deg);
+  box-shadow: 
+    0 40px 80px -15px rgba(0, 0, 0, 0.85),
+    0 0 50px rgba(255, 96, 175, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 96, 175, 0.5);
 }
 
 .uiverse-login-form .header-text {
@@ -468,32 +519,48 @@ html {
 /* About Cards */
 .about-card {
   position: relative;
-  background-color: var(--color-card);
-  border: 1px solid var(--color-border);
+  background: linear-gradient(to bottom left, #ffffff 0%, #ff66cc 100%);
+  border: 1px solid rgba(255, 102, 204, 0.4);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding: 32px;
   gap: 12px;
-  border-radius: 12px;
+  border-radius: 16px;
   cursor: pointer;
   z-index: 1;
+  color: #07192F;
+  box-shadow: 0 10px 30px rgba(255, 102, 204, 0.25);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-card h3 {
+  color: #07192F !important;
+}
+
+.about-card p, .about-card ul li {
+  color: #1E1B2E !important;
+}
+
+.about-card span.font-script {
+  color: #8A005B !important;
 }
 
 .about-card::before {
   content: '';
   position: absolute;
   inset: 0;
-  left: -5px;
-  top: -5px;
+  left: -4px;
+  top: -4px;
   margin: auto;
-  width: calc(100% + 10px);
-  height: calc(100% + 10px);
-  border-radius: 14px;
-  background: linear-gradient(-45deg, var(--color-primary) 0%, var(--color-secondary) 100% );
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  border-radius: 18px;
+  background: linear-gradient(to bottom left, #ffffff 0%, #ff66cc 100%);
   z-index: -10;
   pointer-events: none;
   transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  opacity: 0.8;
 }
 
 .about-card::after {
@@ -501,16 +568,18 @@ html {
   z-index: -1;
   position: absolute;
   inset: 0;
-  background: linear-gradient(-45deg, var(--color-primary) 0%, var(--color-secondary) 100% );
+  background: linear-gradient(to bottom left, #ffffff 0%, #ff66cc 100%);
   transform: translate3d(0, 0, 0) scale(0.95);
   filter: blur(20px);
   transition: filter 0.6s;
+  opacity: 0.6;
 }
 
 .about-card:hover::after {
   filter: blur(30px);
+  opacity: 0.9;
 }
 
-.about-card:hover::before {
-  transform: rotate(180deg);
-}
+.about-card:hover {
+  transform: translateY(-4px);
+}
