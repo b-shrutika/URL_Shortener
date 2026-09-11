@@ -26,3 +26,11 @@ export const logoutUser = async () => {
     navigate("/login");
     return response.data;
 };
+
+export const resetPassword = async (data) => {
+    const response = await api.post(
+        "/api/auth/reset-password",
+        data
+    );
+    return response.data;
+};

@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { createShortUrl, getUserUrls } from '../api/link';
+import { createShortUrl, getUserUrls, getLinkAnalytics, deleteShortUrl } from '../api/link';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import Home from './Home';
 import { 
     Sparkles, 
@@ -17,12 +19,18 @@ import {
     ArrowRight, 
     ArrowLeft,
     User,
-    ListFilter
+    ListFilter,
+    Calendar,
+    Activity,
+    Clock,
+    Trash2,
+    LogOut
 } from 'lucide-react';
 import EmptyState from '../components/EmptyState';
 
 const Shorten = () => {
-    const { user } = useAuth();
+    const { user, setUser } = useAuth();
+    const navigate = useNavigate();
     
     // View Scaffolding: 'dashboard' (Preview mode) vs 'all-links' (Full analytics view)
     const [viewMode, setViewMode] = useState('dashboard');
@@ -34,6 +42,10 @@ const Shorten = () => {
     const [links, setLinks] = useState([]);
     const [loadingLinks, setLoadingLinks] = useState(false);
     const [copiedId, setCopiedId] = useState(null);
+    const [selectedLink, setSelectedLink] = useState(null);
+    const [linkStats, setLinkStats] = useState(null);
+    const [loadingStats, setLoadingStats] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
 
     // Fetch user links for preview & full list
     const fetchLinks = async () => {
@@ -64,10 +76,30 @@ const Shorten = () => {
         }, 150);
     };
 
+    const handleViewLinkStats = async (link) => {
+        setSelectedLink(link);
+        setLinkStats(null);
+        handleSwitchView('link-details');
+        
+        setLoadingStats(true);
+        try {
+            const data = await getLinkAnalytics(link.shortCode);
+            if (data && data.status === 'success') {
+                setLinkStats(data);
+            }
+        } catch (error) {
+            console.error("Failed to fetch link stats:", error);
+        } finally {
+            setLoadingStats(false);
+        }
+    };
+
     const handleCreateLink = async (e) => {
         e.preventDefault();
         if (!originalUrl.trim()) return;
         setGenerating(true);
+        setErrorMsg("");
+        setGeneratedUrl(null);
         try {
             const response = await createShortUrl({ originalUrl });
             setGeneratedUrl(response.shortLink);
@@ -75,6 +107,11 @@ const Shorten = () => {
             fetchLinks(); // refresh links preview
         } catch (error) {
             console.error(error);
+            if (error.response && error.response.data && error.response.data.message) {
+                setErrorMsg(error.response.data.message);
+            } else {
+                setErrorMsg("An error occurred while shortening the URL.");
+            }
         } finally {
             setGenerating(false);
         }
@@ -84,6 +121,28 @@ const Shorten = () => {
         navigator.clipboard.writeText(shortLink);
         setCopiedId(id);
         setTimeout(() => setCopiedId(null), 2000);
+    };
+
+    const handleDeleteLink = async (shortCode, e) => {
+        e.stopPropagation();
+        if (!window.confirm("Are you sure you want to delete this link?")) return;
+        try {
+            await deleteShortUrl(shortCode);
+            if (selectedLink && selectedLink.shortCode === shortCode) {
+                handleSwitchView('dashboard');
+                setSelectedLink(null);
+            }
+            fetchLinks();
+        } catch (error) {
+            console.error("Failed to delete link:", error);
+            alert("Failed to delete the link. Please try again.");
+        }
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        setUser(null);
+        navigate('/');
     };
 
     const totalClicks = links.reduce((sum, link) => sum + (link.clicks || 0), 0);
@@ -104,10 +163,10 @@ const Shorten = () => {
             </div>
 
             {/* 2. Soft Blurred Glass Backdrop Wrapper */}
-            <div className="fixed inset-0 z-20 bg-[#0a0e27]/35 backdrop-blur-md flex items-center justify-center p-4 md:p-6 overflow-y-auto">
+            <div className="fixed inset-0 z-20 bg-[#0a0e27]/35 backdrop-blur-md flex items-center justify-center overflow-y-auto">
                 
                 {/* 3. Compact Floating White Panel Container (Decreased Padding) */}
-                <div className="w-[90%] max-w-4xl h-[72vh] bg-[#FAFBFD] rounded-[24px] md:rounded-[28px] border border-white/80 shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_40px_rgba(255,96,175,0.25)] flex flex-col md:flex-row overflow-hidden relative my-auto">
+                <div className="w-[95%] h-[95vh] bg-[#FAFBFD] rounded-[24px] md:rounded-[28px] border border-white/80 shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_40px_rgba(255,96,175,0.25)] flex flex-col md:flex-row overflow-hidden relative my-auto">
                     
                     {/* LEFT SIDEBAR inside Compact White Card (Decreased Padding p-4) */}
                     <div className="w-full md:w-52 bg-white border-r border-slate-100 p-4 flex flex-col justify-between shrink-0 z-10">
@@ -170,6 +229,13 @@ const Shorten = () => {
                             <button className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-slate-500 hover:text-slate-900 transition-colors">
                                 <HelpCircle size={15} />
                                 <span>Help & Support</span>
+                            </button>
+                            <button 
+                                onClick={handleLogout}
+                                className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-slate-500 hover:text-red-500 transition-colors mt-2"
+                            >
+                                <LogOut size={15} />
+                                <span>Log Out</span>
                             </button>
                         </div>
                     </div>
@@ -249,6 +315,14 @@ const Shorten = () => {
                                             </div>
                                         </form>
 
+                                        {/* Error Message Display */}
+                                        {errorMsg && (
+                                            <div className="mt-4 p-3 bg-red-50 text-red-500 text-xs font-bold rounded-xl border border-red-100 flex items-center gap-2 shadow-sm animate-in fade-in slide-in-from-top-2 duration-300">
+                                                <HelpCircle size={14} className="shrink-0" />
+                                                <span>{errorMsg}</span>
+                                            </div>
+                                        )}
+
                                         {/* Generated Result Display */}
                                         {generatedUrl && (
                                             <div className="mt-6 bg-[#FAFBFD] border border-slate-200 rounded-2xl p-4 shadow-sm flex items-center justify-between gap-3">
@@ -310,7 +384,8 @@ const Shorten = () => {
                                                         return (
                                                             <div
                                                                 key={link._id || link.shortCode}
-                                                                className="bg-[#FAFBFD] border border-slate-200/70 hover:border-slate-300 rounded-xl p-3 flex items-center justify-between gap-3 relative overflow-hidden transition-all duration-200 shadow-2xs"
+                                                                onClick={() => handleViewLinkStats(link)}
+                                                                className="bg-[#FAFBFD] border border-slate-200/70 hover:border-[#FF2D75]/30 rounded-xl p-3 flex items-center justify-between gap-3 relative overflow-hidden transition-all duration-200 shadow-2xs cursor-pointer hover:shadow-sm"
                                                             >
                                                                 <div 
                                                                     className="absolute left-0 top-0 bottom-0 w-1"
@@ -326,6 +401,7 @@ const Shorten = () => {
                                                                         target="_blank"
                                                                         rel="noreferrer"
                                                                         className="text-xs font-bold text-[#0f172a] hover:text-[#FF2D75] truncate block"
+                                                                        onClick={(e) => e.stopPropagation()}
                                                                     >
                                                                         {fullShortUrl}
                                                                     </a>
@@ -338,7 +414,10 @@ const Shorten = () => {
                                                                     </span>
 
                                                                     <button
-                                                                        onClick={() => handleCopy(fullShortUrl, link._id || link.shortCode)}
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            handleCopy(fullShortUrl, link._id || link.shortCode);
+                                                                        }}
                                                                         className="p-1.5 rounded-lg bg-white border border-slate-200 hover:border-[#FF2D75] text-slate-600 transition-colors"
                                                                         title="Copy"
                                                                     >
@@ -347,6 +426,14 @@ const Shorten = () => {
                                                                         ) : (
                                                                             <Copy size={12} />
                                                                         )}
+                                                                    </button>
+
+                                                                    <button
+                                                                        onClick={(e) => handleDeleteLink(link.shortCode, e)}
+                                                                        className="p-1.5 rounded-lg bg-white border border-slate-200 hover:border-red-500 hover:text-red-500 text-slate-600 transition-colors"
+                                                                        title="Delete"
+                                                                    >
+                                                                        <Trash2 size={12} />
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -430,7 +517,8 @@ const Shorten = () => {
                                                     return (
                                                         <div
                                                             key={link._id || link.shortCode}
-                                                            className="bg-white border border-slate-200/80 hover:border-slate-300 rounded-2xl p-4 transition-all duration-200 flex items-center justify-between gap-4 shadow-2xs hover:shadow-xs relative overflow-hidden"
+                                                            onClick={() => handleViewLinkStats(link)}
+                                                            className="bg-white border border-slate-200/80 hover:border-[#FF2D75]/40 rounded-2xl p-4 transition-all duration-200 flex items-center justify-between gap-4 shadow-2xs hover:shadow-md relative overflow-hidden cursor-pointer"
                                                         >
                                                             <div 
                                                                 className="absolute left-0 top-0 bottom-0 w-1.5"
@@ -445,7 +533,8 @@ const Shorten = () => {
                                                                     href={fullShortUrl}
                                                                     target="_blank"
                                                                     rel="noreferrer"
-                                                                    className="text-base font-bold text-[#0f172a] hover:text-[#FF2D75] flex items-center gap-1.5 truncate"
+                                                                    className="text-base font-bold text-[#0f172a] hover:text-[#FF2D75] flex items-center gap-1.5 truncate w-fit"
+                                                                    onClick={(e) => e.stopPropagation()}
                                                                 >
                                                                     {fullShortUrl}
                                                                     <ExternalLink size={14} className="shrink-0 text-slate-400" />
@@ -459,7 +548,10 @@ const Shorten = () => {
                                                                 </div>
 
                                                                 <button
-                                                                    onClick={() => handleCopy(fullShortUrl, link._id || link.shortCode)}
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        handleCopy(fullShortUrl, link._id || link.shortCode);
+                                                                    }}
                                                                     className="p-2 rounded-xl bg-slate-50 border border-slate-200 hover:border-[#FF2D75] hover:text-[#FF2D75] text-slate-600 transition-colors"
                                                                     title="Copy Link"
                                                                 >
@@ -468,6 +560,14 @@ const Shorten = () => {
                                                                     ) : (
                                                                         <Copy size={16} />
                                                                     )}
+                                                                </button>
+
+                                                                <button
+                                                                    onClick={(e) => handleDeleteLink(link.shortCode, e)}
+                                                                    className="p-2 rounded-xl bg-slate-50 border border-slate-200 hover:border-red-500 hover:text-red-500 text-slate-600 transition-colors"
+                                                                    title="Delete Link"
+                                                                >
+                                                                    <Trash2 size={16} />
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -488,6 +588,140 @@ const Shorten = () => {
                                             <span>Back to Dashboard</span>
                                         </button>
                                     </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* VIEW MODE 3: SINGLE LINK DETAILS & STATS */}
+                        {viewMode === 'link-details' && selectedLink && (
+                            <div className="space-y-6 flex-1 flex flex-col">
+                                <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.03)] flex-1 flex flex-col relative">
+                                    
+                                    {/* Header & Back Button */}
+                                    <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-100">
+                                        <div>
+                                            <h2 className="text-xl font-extrabold text-[#0f172a]">Link Statistics</h2>
+                                            <p className="text-xs text-slate-400 font-medium mt-1">Detailed performance for your short link</p>
+                                        </div>
+                                        <button
+                                            onClick={() => handleSwitchView('all-links')}
+                                            className="px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:text-[#FF2D75] hover:border-[#FF2D75] font-bold text-xs flex items-center gap-2 transition-all"
+                                        >
+                                            <ArrowLeft size={14} />
+                                            <span>Back to Links</span>
+                                        </button>
+                                    </div>
+
+                                    {/* Link Details Cards */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+                                        {/* Original Link Card */}
+                                        <div className="bg-[#FAFBFD] border border-slate-200/80 rounded-2xl p-5 relative overflow-hidden group">
+                                            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                                                <Link2 size={64} className="text-[#3B82F6]" />
+                                            </div>
+                                            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Original Destination</div>
+                                            <a 
+                                                href={selectedLink.originalUrl} 
+                                                target="_blank" 
+                                                rel="noreferrer"
+                                                className="text-sm font-medium text-slate-700 hover:text-[#3B82F6] break-all block leading-relaxed"
+                                            >
+                                                {selectedLink.originalUrl}
+                                            </a>
+                                        </div>
+
+                                        {/* Short Link Card */}
+                                        <div className="bg-[#FAFBFD] border border-slate-200/80 rounded-2xl p-5 relative overflow-hidden group">
+                                            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                                                <Sparkles size={64} className="text-[#FF2D75]" />
+                                            </div>
+                                            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center justify-between">
+                                                <span>Short URL</span>
+                                                <button
+                                                    onClick={() => handleCopy(`${baseUrl}/${selectedLink.shortCode}`, 'detail-copy')}
+                                                    className="text-[#FF2D75] hover:text-[#ff1493] flex items-center gap-1"
+                                                >
+                                                    {copiedId === 'detail-copy' ? <Check size={12} /> : <Copy size={12} />}
+                                                    <span>{copiedId === 'detail-copy' ? 'Copied' : 'Copy'}</span>
+                                                </button>
+                                            </div>
+                                            <a 
+                                                href={`${baseUrl}/${selectedLink.shortCode}`} 
+                                                target="_blank" 
+                                                rel="noreferrer"
+                                                className="text-lg font-bold text-[#FF2D75] hover:underline block truncate"
+                                            >
+                                                {`${baseUrl}/${selectedLink.shortCode}`}
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    {/* Main Stats Area */}
+                                    <div className="flex-1 bg-[#0f172a] rounded-3xl p-6 md:p-8 flex items-center justify-center relative overflow-hidden shadow-xl">
+                                        {/* Decorative Background Elements */}
+                                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#FF2D75] via-[#8B5CF6] to-[#3B82F6]" />
+                                        <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#FF2D75]/10 rounded-full blur-3xl pointer-events-none" />
+                                        <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-[#3B82F6]/10 rounded-full blur-3xl pointer-events-none" />
+                                        
+                                        <div className="z-10 w-full h-full flex flex-col md:flex-row items-center justify-center gap-10">
+                                            {loadingStats ? (
+                                                <div className="flex flex-col items-center justify-center text-slate-400">
+                                                    <RefreshCw size={32} className="animate-spin text-[#FF2D75] mb-4" />
+                                                    <span className="text-sm font-medium">Loading advanced analytics...</span>
+                                                </div>
+                                            ) : linkStats ? (
+                                                <>
+                                                    <div className="text-center">
+                                                        <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white/10 text-white backdrop-blur-sm border border-white/20 mb-6 shadow-[0_0_30px_rgba(255,45,117,0.3)]">
+                                                            <MousePointer size={32} className="text-[#FF60AF]" />
+                                                        </div>
+                                                        <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Engagements</h3>
+                                                        <div className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-400 drop-shadow-sm mb-4">
+                                                            {linkStats.totalClicks || 0}
+                                                        </div>
+                                                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold">
+                                                            <Activity size={14} />
+                                                            <span>Active Link</span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {linkStats.clicksByDevice && linkStats.clicksByDevice.length > 0 && (
+                                                        <div className="h-[220px] w-full max-w-[320px] flex flex-col items-center">
+                                                            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Clicks By Device</h3>
+                                                            <div className="w-full flex-1">
+                                                                <ResponsiveContainer width="100%" height="100%">
+                                                                    <PieChart>
+                                                                        <Pie
+                                                                            data={linkStats.clicksByDevice}
+                                                                            cx="50%"
+                                                                            cy="50%"
+                                                                            innerRadius={50}
+                                                                            outerRadius={80}
+                                                                            paddingAngle={5}
+                                                                            dataKey="count"
+                                                                            nameKey="_id"
+                                                                        >
+                                                                            {linkStats.clicksByDevice.map((entry, index) => (
+                                                                                <Cell key={`cell-${index}`} fill={['#FF2D75', '#3B82F6', '#10B981', '#F59E0B', '#8B5CF6'][index % 5]} />
+                                                                            ))}
+                                                                        </Pie>
+                                                                        <Tooltip 
+                                                                            contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '12px', color: '#fff' }}
+                                                                            itemStyle={{ color: '#fff' }}
+                                                                        />
+                                                                        <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
+                                                                    </PieChart>
+                                                                </ResponsiveContainer>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </>
+                                            ) : (
+                                                <div className="text-slate-500">Analytics unavailable.</div>
+                                            )}
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         )}

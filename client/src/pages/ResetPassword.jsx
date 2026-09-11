@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { loginUser } from "../api/auth";
-import { useAuth } from '../context/AuthContext';
+import { resetPassword } from "../api/auth";
 import Home from './Home';
 
-const Login = () => {
+const ResetPassword = () => {
     const navigate = useNavigate();
-    const { setUser } = useAuth();
     const [formData, setFormData] = useState({
         email: "",
-        password: "",
+        newPassword: "",
     });
+    const [message, setMessage] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -24,14 +23,16 @@ const Login = () => {
     const handleSubmit = async(e)=>{
         e.preventDefault();
         setLoading(true);
+        setError("");
+        setMessage("");
+        
         try {
-           const response = await loginUser(formData);
-           setUser(response.user);
-           localStorage.setItem("token", response.token);
-           navigate("/shorten");
+           const response = await resetPassword(formData);
+           setMessage(response.message || "Password reset successfully!");
+           setTimeout(() => navigate("/login"), 2000);
         } catch (error) {
             setError(
-                error.response?.data?.message || "Login Failed"
+                error.response?.data?.error || error.response?.data?.message || "Password reset failed"
             )
         } finally{
             setLoading(false);
@@ -55,16 +56,21 @@ const Login = () => {
             {/* Dark Glass Overlay & Floating 3D Card */}
             <div className="fixed inset-0 z-20 bg-[#0a0e27]/60 backdrop-blur-xl flex items-center justify-center p-4 overflow-y-auto">
                 <form className="uiverse-login-form my-auto" onSubmit={handleSubmit}>
-                    <h1 className="header-text font-script">Login</h1>
+                    <h1 className="header-text font-script" style={{ fontSize: '1.8rem' }}>Reset Password</h1>
                     
                     {error && (
                         <div className='rounded-lg bg-red-500/20 border border-red-500/40 p-3 text-red-300 text-sm text-center font-medium'>
                             {error}
                         </div>
                     )}
+                    {message && (
+                        <div className='rounded-lg bg-emerald-500/20 border border-emerald-500/40 p-3 text-emerald-300 text-sm text-center font-medium'>
+                            {message} Redirecting...
+                        </div>
+                    )}
                     
                     <span className="input-span">
-                        <label htmlFor="email" className="label">Email</label>
+                        <label htmlFor="email" className="label">Registered Email</label>
                         <input 
                             type="email" 
                             name="email" 
@@ -76,30 +82,28 @@ const Login = () => {
                     </span>
                     
                     <span className="input-span">
-                        <label htmlFor="password" className="label">Password</label>
+                        <label htmlFor="newPassword" className="label">New Password</label>
                         <input 
                             type="password" 
-                            name="password" 
-                            id="password" 
-                            value={formData.password}
+                            name="newPassword" 
+                            id="newPassword" 
+                            value={formData.newPassword}
                             onChange={handleChange}
                             required
+                            minLength={6}
                         />
-                    </span>
-                    
-                    <span className="span forgot-password">
-                        <Link to="/reset-password">Forgot password?</Link>
                     </span>
                     
                     <input 
                         className="submit" 
                         type="submit" 
-                        value={loading ? "Logging in..." : "Log in"} 
+                        value={loading ? "Resetting..." : "Reset Password"} 
                         disabled={loading}
+                        style={{ marginTop: '20px' }}
                     />
                     
                     <span className="span signup-text">
-                        Don't have an account? <Link to="/register">Sign up</Link>
+                        Remembered it? <Link to="/login">Log in</Link>
                     </span>
                 </form>
             </div>
@@ -107,4 +111,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default ResetPassword

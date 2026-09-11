@@ -18,3 +18,17 @@ export const getUserUrls = async () => {
 
     return response.data;
 };
+
+export const getLinkAnalytics = async (shortCode) => {
+    const response = await api.get(
+        `/api/links/analytics/${shortCode}`
+    );
+    return response.data;
+};
+
+export const deleteShortUrl = async (shortCode) => {
+    const response = await api.delete(
+        `/api/links/${shortCode}`
+    );
+    return response.data;
+};

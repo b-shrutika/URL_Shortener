@@ -80,8 +80,29 @@ async function getUserUrls(req, res) {
         links
     });
 }
+async function deleteLink(req, res) {
+    const { shortCode } = req.params;
+
+    try {
+        const link = await LinkModel.findOne({ shortCode, userId: req.userId });
+        if (!link) {
+            return res.status(404).json({ message: "Link not found or unauthorized", status: "failed" });
+        }
+
+        await LinkModel.deleteOne({ shortCode });
+        await clickModel.deleteMany({ shortCode });
+        await redisClient.redisClient.del(shortCode);
+
+        res.status(200).json({ message: "Link deleted successfully", status: "success" });
+    } catch (error) {
+        console.error("Error deleting link:", error);
+        res.status(500).json({ message: "Internal server error", status: "failed" });
+    }
+}
+
 module.exports = {
     createLink,
     redirectToOriginalUrl, 
-    getUserUrls
+    getUserUrls,
+    deleteLink
 }
